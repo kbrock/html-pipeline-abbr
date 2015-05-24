@@ -58,7 +58,7 @@ module HTML
       # @return [String] html with all abbreviations replaced
       def abbrs_filter(content, abbrs)
         abbrs.each do |abbr, full|
-          content = abbr_filter(content, abbr, full) if content.include?(abbr)
+          content = abbr_filter(content, abbr, full)
         end
         content
       end
@@ -68,7 +68,7 @@ module HTML
       # @return [String] html with abbreviation tags
       def abbr_filter(content, abbr, full)
         target_html = abbr_tag(abbr, full)
-        content.gsub(/\b#{abbr}\b/) { |_| target_html }
+        content.gsub(/\b#{abbr}\b/) { |_| target_html } || content
       end
 
       # Return html string to use as an abbr tag
