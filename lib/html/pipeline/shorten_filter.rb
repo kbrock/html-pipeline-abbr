@@ -16,7 +16,7 @@ module HTML
 
       def abbr_filter(content, abbr, full)
         target_html = abbr_tag(abbr, full)
-        content.gsub(full) { |_| target_html }
+        content.gsub(/\b#{full}\b/) { |_| target_html }
       end
     end
   end

@@ -68,7 +68,7 @@ module HTML
       # @return [String] html with abbreviation tags
       def abbr_filter(content, abbr, full)
         target_html = abbr_tag(abbr, full)
-        content.gsub(abbr) { |_| target_html }
+        content.gsub(/\b#{abbr}\b/) { |_| target_html }
       end
 
       # Return html string to use as an abbr tag
