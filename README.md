@@ -43,7 +43,7 @@ Prints:
 <p>Lets generate some <strong>great</strong> <abbr title="Hypertxt">HTML</abbr>.</p>
 ```
 
-On the flip side, there is also the `ShortenFilter` which will find words that can be abbreviated and shorten them.
+On the flip side, there is also the `AutoAbbrFilter` which will find words that can be abbreviated and shorten them.
 
 ```ruby
 pipeline = HTML::Pipeline.new [

@@ -1,10 +1,10 @@
 require 'minitest_helper'
 
-class Html::Pipeline::ShortenFilterTest < Minitest::Test
-  ShortenFilter = HTML::Pipeline::ShortenFilter
+class Html::Pipeline::AutoAbbrFilterTest < Minitest::Test
+  AutoAbbrFilter = HTML::Pipeline::AutoAbbrFilter
 
   def html_from_fragment(str)
-    ShortenFilter.new(str, {}).call.to_html.chomp
+    AutoAbbrFilter.new(str, {}).call.to_html.chomp
   end
 
   def test_no_change
