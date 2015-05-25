@@ -3,8 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.2.0] - 2015-05-25
 ### Added
-- `abbr_emoji_filter`: no `alt` and `title` attributes works better with `abbr`
+- `abbr_emoji_filter` is an `emoji_filter` without the `alt` and `title` attributes. It works better with the `abbr` tag.
 - project references
 
 ### Changed
@@ -19,3 +21,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 [unreleased]: https://github.com/kbrock/html-pipeline-abbr/compare/v0.1.0...HEAD
 [0.2.0]: https://github.com/kbrock/html-pipeline-abbr/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/kbrock/html-pipeline-abbr/commits/v0.1.0

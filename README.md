@@ -28,7 +28,6 @@ Or install it yourself as:
 pipeline = HTML::Pipeline.new [
   HTML::Pipeline::MarkdownFilter,
   HTML::Pipeline::AbbrFilter,
-  HTML::Pipeline::SyntaxHighlightFilter,
 ]
 result = pipeline.call <<-CODE
 Lets generate some *great* HTML.
@@ -48,8 +47,7 @@ On the flip side, there is also the `AutoAbbrFilter` which will find words that 
 ```ruby
 pipeline = HTML::Pipeline.new [
   HTML::Pipeline::MarkdownFilter,
-  HTML::Pipeline::ShortenFilter,
-  HTML::Pipeline::SyntaxHighlightFilter,
+  HTML::Pipeline::AutoAbbrFilter,
 ]
 result = pipeline.call <<-CODE
 Lets generate some *great* Hypertext.
