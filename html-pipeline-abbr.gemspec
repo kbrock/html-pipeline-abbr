@@ -15,10 +15,11 @@ Gem::Specification.new do |spec|
                           In the mean time this adds abbr tags}
   spec.homepage      = "http://github.com/kbrock/html-pipeline-abbr/"
 
-  # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
-  # delete this section to allow pushing this gem to any host.
   if spec.respond_to?(:metadata)
-#    spec.metadata['allowed_push_host'] = ""
+    spec.metadata = {
+      "source_code_uri"   => "http://github.com/kbrock/html-pipeline-abbr",
+      "bug_tracker_uri"   => "http://github.com/kbrock/html-pipeline-abbr/issues",
+    }
   end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
