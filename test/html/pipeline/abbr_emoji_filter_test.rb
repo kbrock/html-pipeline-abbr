@@ -1,5 +1,4 @@
 require 'minitest_helper'
-require 'byebug'
 
 class Html::Pipeline::AbbrEmojiFilterTest < Minitest::Test
   AbbrEmojiFilter = HTML::Pipeline::AbbrEmojiFilter
