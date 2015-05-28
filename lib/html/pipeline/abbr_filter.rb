@@ -3,6 +3,7 @@ module HTML
     # uses defined abbreviations and add abbr tags around them
 
     class AbbrFilter < Filter
+      include HTML::Pipeline::Abbr::Replace
       DEFAULT_IGNORED_ANCESTOR_TAGS = %w(pre code tt).freeze
       DEFINITION_PATTERN=%r{(?:^|\n)\*\[([^\]]+)\]: *(.+)$}
 
@@ -26,23 +27,6 @@ module HTML
       def replace_abbrs(abbrs)
         replace_nodes do |content|
           abbrs_filter(content, abbrs)
-        end
-      end
-
-      # for reach of the text nodes that we can modify
-      def replace_nodes
-        doc.xpath(".//text()").each do |node|
-          next if has_ancestor?(node, ignored_ancestor_tags)
-
-          content = node.to_html
-          html = yield content
-
-          next if html == content || html.nil?
-          if html.length == 0
-            node.parent.remove
-          else
-            node.replace(html)
-          end
         end
       end
 
