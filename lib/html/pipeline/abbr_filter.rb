@@ -4,7 +4,6 @@ module HTML
 
     class AbbrFilter < Filter
       include HTML::Pipeline::Abbr::Replace
-      DEFAULT_IGNORED_ANCESTOR_TAGS = %w(pre code tt).freeze
       DEFINITION_PATTERN=%r{(?:^|\n)\*\[([^\]]+)\]: *(.+)$}
 
       def call
@@ -16,8 +15,8 @@ module HTML
       private
 
       def extract_defs
-        abbrs ||= {}
-        replace_nodes do |content|           
+        abbrs = {}
+        replace_nodes do |content|
           def_filter(content, abbrs) if content.include?("*[")
         end
         abbrs
@@ -41,10 +40,9 @@ module HTML
       #
       # @return [String] html with all abbreviations replaced
       def abbrs_filter(content, abbrs)
-        abbrs.each do |abbr, full|
-          content = abbr_filter(content, abbr, full)
+        abbrs.inject(content) do |content, (abbr, full)|
+          abbr_filter(content, abbr, full)
         end
-        content
       end
 
       # Return html with all of an abbreviation replaced
@@ -60,17 +58,6 @@ module HTML
       # @return [String] abbr html
       def abbr_tag(abbr, full)
         %(<abbr title="#{full}">#{abbr}</abbr>)
-      end
-
-      # Return ancestor tags to stop processing
-      #
-      # @return [Array<String>] Ancestor tags.
-      def ignored_ancestor_tags
-        if context[:ignored_ancestor_tags]
-          DEFAULT_IGNORED_ANCESTOR_TAGS | context[:ignored_ancestor_tags]
-        else
-          DEFAULT_IGNORED_ANCESTOR_TAGS
-        end
       end
     end
   end
