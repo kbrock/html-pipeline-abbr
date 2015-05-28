@@ -16,7 +16,7 @@ module HTML
 
       def extract_defs
         abbrs = {}
-        replace_nodes do |content|
+        replace_nodes do |content, node|
           def_filter(content, abbrs) if content.include?("*[")
         end
         abbrs
@@ -24,8 +24,8 @@ module HTML
 
       # find abbrs in the code
       def replace_abbrs(abbrs)
-        replace_nodes do |content|
-          abbrs_filter(content, abbrs)
+        replace_nodes do |content, node|
+          abbrs_filter(content, abbrs, !has_ancestor?(node, %(svg)))
         end
       end
 
@@ -39,12 +39,19 @@ module HTML
       # Return html with abbreviations replaced
       #
       # @return [String] html with all abbreviations replaced
-      def abbrs_filter(content, abbrs)
+      def abbrs_filter(content, abbrs, abbr_tag = true)
         abbrs.inject(content) do |content, (abbr, full)|
-          abbr_filter(content, abbr, full)
+          if abbr_tag
+            abbr_filter(content, abbr, full)
+          else
+            replace_value(content, abbr, full)
+          end
         end
       end
 
+      def replace_value(content, abbr, full)
+        content.gsub(/\b#{abbr}\b/) { |_| full } || content
+      end
       # Return html with all of an abbreviation replaced
       #
       # @return [String] html with abbreviation tags
