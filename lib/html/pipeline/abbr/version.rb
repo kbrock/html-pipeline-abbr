@@ -1,5 +1,5 @@
 module Html
-  module Pipeline
+  class Pipeline
     module Abbr
       VERSION = "0.2.0"
     end
