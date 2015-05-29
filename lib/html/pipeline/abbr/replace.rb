@@ -23,7 +23,7 @@ module HTML
           end
         end
 
-        # Return ancestor tags to stop the emojification.
+        # Return ancestor tags to stop the conversion
         #
         # @return [Array<String>] Ancestor tags.
         def ignored_ancestor_tags
@@ -33,7 +33,6 @@ module HTML
             DEFAULT_IGNORED_ANCESTOR_TAGS
           end
         end
-
       end
     end
   end
