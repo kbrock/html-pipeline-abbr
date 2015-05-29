@@ -4,7 +4,8 @@ module HTML
 
     class AbbrFilter < Filter
       include HTML::Pipeline::Abbr::Replace
-      DEFINITION_PATTERN=%r{(?:^|\n)\*\[([^\]]+)\]: *(.+)$}
+      DEFINITION_PATTERN=%r{(?:^|\n)\*\[([^\]]+)\]: *(.+)$}.freeze
+      RAW_ANCESTORS=%w(svg).freeze
 
       def call
         abbrs = extract_defs
@@ -25,7 +26,7 @@ module HTML
       # find abbrs in the code
       def replace_abbrs(abbrs)
         replace_nodes do |content, node|
-          abbrs_filter(content, abbrs, !has_ancestor?(node, %(svg)))
+          abbrs_filter(content, abbrs, !has_ancestor?(node, raw_ancestor_tags))
         end
       end
 
@@ -65,6 +66,17 @@ module HTML
       # @return [String] abbr html
       def abbr_tag(abbr, full)
         %(<abbr title="#{full}">#{abbr}</abbr>)
+      end
+
+      # Return ancestor tags to still convert, but not add abbr
+      #
+      # @return [Array<String>] Ancestor tags.
+      def raw_ancestor_tags
+        if context[:raw_ancestor_tags]
+          RAW_ANCESTORS | context[:raw_ancestor_tags]
+        else
+          RAW_ANCESTORS
+        end
       end
     end
   end
