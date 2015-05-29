@@ -42,22 +42,15 @@ module HTML
       # @return [String] html with all abbreviations replaced
       def abbrs_filter(content, abbrs, abbr_tag = true)
         abbrs.inject(content) do |content, (abbr, full)|
-          if abbr_tag
-            abbr_filter(content, abbr, full)
-          else
-            replace_value(content, abbr, full)
-          end
+          abbr_filter(content, abbr, full, abbr_tag)
         end
       end
 
-      def replace_value(content, abbr, full)
-        content.gsub(/\b#{abbr}\b/) { |_| full } || content
-      end
       # Return html with all of an abbreviation replaced
       #
       # @return [String] html with abbreviation tags
-      def abbr_filter(content, abbr, full)
-        target_html = abbr_tag(abbr, full)
+      def abbr_filter(content, abbr, full, abbr_tag = true)
+        target_html = abbr_tag ? abbr_tag(abbr, full) : full
         content.gsub(/\b#{abbr}\b/) { |_| target_html } || content
       end
 
