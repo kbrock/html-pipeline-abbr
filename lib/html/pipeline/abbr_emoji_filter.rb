@@ -46,6 +46,11 @@ module HTML
         emoji.custom? ? name : "&#x#{emoji.hex_inspect.sub(/-.*/, '')};"
       end
 
+
+      def prefer_unicode
+        context[:prefer_unicode]
+      end
+
       # Return ancestor tags to return unicode characters instead.
       #
       # @return [Array<String>|true] Ancestor tags.
