@@ -8,59 +8,60 @@ module HTML
     class AbbrEmojiFilter < EmojiFilter
       include HTML::Pipeline::Abbr::Replace
 
-      DEFAULT_UNICODE_ANCESTOR_TAGS = %w(svg).freeze
+      DEFAULT_NON_HTML_TAGS = %w(svg).freeze
 
       def call
         replace_nodes do |content, node|
-          if unicode_ancestor_tags == true || has_ancestor?(node, unicode_ancestor_tags)
-            emoji_unicode_filter(content)
-          else
-            emoji_image_filter(content)
-          end
+          non_html = has_ancestor?(node, non_html_tags)
+          emoji_filter(content, non_html)
         end
         doc
       end
 
-      def emoji_image_filter(text)
+      def emoji_filter(text, non_html)
         return text unless text.include?(':')
 
         text.gsub(emoji_pattern) do
-          emoji_tag(Regexp.last_match[1])
+          name = Regexp.last_match[1]
+          emoji = Emoji.find_by_alias(name)
+          if non_html
+            emoji.custom? ? name : emoji_unicode_text(emoji)
+          elsif prefer_unicode
+            emoji.custom? ? emoji_img_tag(name) : emoji_unicode_tag(emoji)
+          else
+            emoji_img_tag(name)
+          end
         end
       end
 
-      def emoji_unicode_filter(text)
-        return text unless text.include?(':')
-
-        text.gsub(emoji_pattern) do
-          emoji_unicode_tag(Regexp.last_match[1])
-        end
-      end
-
-      def emoji_tag(name)
+      def emoji_img_tag(name)
         "<img class='emoji' alt='#{name}' src='#{emoji_url(name)}' />"
       end
 
-      def emoji_unicode_tag(name)
-        emoji = Emoji.find_by_alias(name)
-        emoji.custom? ? name : "&#x#{emoji.hex_inspect.sub(/-.*/, '')};"
+      def emoji_unicode_tag(emoji)
+        "<span class='emoji'>#{emoji_unicode_text(emoji)}"
       end
 
+      def emoji_unicode_text(emoji)
+        "&#x#{emoji.hex_inspect.sub(/-.*/, '')};"
+      end
 
+      # Return true if unicode is preferred in html
+      #
+      # @return [Array<String>|true] Ancestor tags.
       def prefer_unicode
         context[:prefer_unicode]
       end
 
-      # Return ancestor tags to return unicode characters instead.
+      # Return ancestor tags that don't allow html
+      # Return true if forcing unicode always
       #
       # @return [Array<String>|true] Ancestor tags.
-      def unicode_ancestor_tags
-        if context[:unicode_ancestor_tags] == true
-          true
-        elsif context[:unicode_ancestor_tags]
-          DEFAULT_UNICODE_ANCESTOR_TAGS | context[:ignored_ancestor_tags]
+      def non_html_tags
+        if context[:non_html_tags]
+          DEFAULT_NON_HTML_TAGS | context[:non_html_tags]
         else
-          DEFAULT_UNICODE_ANCESTOR_TAGS
+          DEFAULT_NON_HTML_TAGS
         end
       end
     end
