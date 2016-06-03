@@ -5,7 +5,7 @@ module HTML
     class AbbrFilter < Filter
       include HTML::Pipeline::Abbr::Replace
       DEFINITION_PATTERN=%r{(?:^|\n)\*\[([^\]]+)\]: *(.+)$}.freeze
-      RAW_ANCESTORS=%w(svg).freeze
+      RAW_ANCESTORS=%w(svg code).freeze
 
       def call
         abbrs = extract_defs
@@ -61,7 +61,7 @@ module HTML
         %(<abbr title="#{full}">#{abbr}</abbr>)
       end
 
-      # Return ancestor tags to still convert, but not add abbr
+      # Return ancestor tags to still convert, but not add abbr tag
       #
       # @return [Array<String>] Ancestor tags.
       def raw_ancestor_tags
